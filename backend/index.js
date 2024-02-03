@@ -1,10 +1,14 @@
 require("dotenv").config();
 const OpenAI = require("openai");
-const express = require("express");
-const cors = require("cors");
-const app = express();
+const app = require("express")();
+const bodyParser = require("body-parser");
+var cors = require("cors");
 
-// cors
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// cors Issue resolution
 // let corsOptions = {
 //   origin: "https://www.domain.com",
 //   credentials: true,
@@ -13,14 +17,10 @@ const app = express();
 app.use(cors());
 
 //post
-app.use(express.json()); // for parsing application/json
-app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-app.get("/fortuneTell", async function (req, res) {
+app.post("/fortuneTell", async function (req, res) {
   const completion = await openai.chat.completions.create({
     model: "gpt-3.5-turbo",
     messages: [
@@ -44,7 +44,7 @@ app.get("/fortuneTell", async function (req, res) {
   });
   let fortune = completion.choices[0].message["content"];
   console.log(fortune);
-  res.send(fortune);
+  res.json({ assistant: fortune });
 });
 
 app.listen(3000);
