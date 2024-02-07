@@ -1,4 +1,5 @@
 require("dotenv").config();
+const serverless = require("serverless-http");
 const OpenAI = require("openai");
 const app = require("express")();
 const bodyParser = require("body-parser");
@@ -9,12 +10,12 @@ const openai = new OpenAI({
 });
 
 // cors Issue resolution
-// let corsOptions = {
-//   origin: "https://www.domain.com",
-//   credentials: true,
-// };
+let corsOptions = {
+  origin: "https://chat-uranai.pages.dev/",
+  credentials: true,
+};
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 //post
 app.use(bodyParser.json()); // for parsing application/json
@@ -78,4 +79,4 @@ app.post("/fortuneTell", async function (req, res) {
   res.json({ assistant: fortune });
 });
 
-app.listen(3000);
+module.exports.handler = serverless(app);

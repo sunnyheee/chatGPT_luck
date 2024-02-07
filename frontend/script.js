@@ -28,7 +28,7 @@ async function sendMessage() {
     const loadingMessageContainer = createLoadingMessage();
 
     try {
-      const response = await fetch("http://localhost:3000/fortuneTell", {
+      const response = await fetch(`${process.env.AWS_BACKEND}/fortuneTell`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
