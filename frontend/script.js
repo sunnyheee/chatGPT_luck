@@ -1,5 +1,19 @@
 let userMessages = [];
 let assistantMessages = [];
+let myDateTime = "";
+
+function start() {
+  const date = document.getElementById("date").value;
+  const hour = document.getElementById("hour").value;
+  if (date === "") {
+    alert("生年月日を入力してください");
+    return;
+  }
+  myDateTime = date + hour;
+
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("chat").style.display = "block";
+}
 
 async function sendMessage() {
   const messageInput = document.getElementById("messageInput");
@@ -20,6 +34,7 @@ async function sendMessage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          myDateTime: myDateTime,
           userMessages: userMessages,
           assistantMessages: assistantMessages,
         }),
